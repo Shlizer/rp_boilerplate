@@ -10,6 +10,8 @@
 .history
 
 log.txt
+traceback.txt
+
 *.rpyc
 *.rpymc
 *.psd
