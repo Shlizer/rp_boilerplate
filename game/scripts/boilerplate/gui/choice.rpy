@@ -7,16 +7,16 @@
 
 screen choice(items):
     style_prefix "choice"
-    default _choice_hover = None
+    default choice_hover = None
 
     vbox:
         for i in range(len(items)):
             button:
-                hovered [SetLocalVariable('_choice_hover', i), With(Dissolve(0.1))]
-                unhovered [SetLocalVariable('_choice_hover', None), With(Dissolve(0.1))]
+                hovered [SetLocalVariable('choice_hover', i), With(Dissolve(0.1))]
+                unhovered [SetLocalVariable('choice_hover', None), With(Dissolve(0.1))]
                 action items[i].action
 
-                if (_choice_hover == i):
+                if (choice_hover == i):
                     background Frame("images/gui/choice_box_hover.png", 2, 2, 2, 2, Tile=True)
                     text items[i].caption color "#eeeeee"
                 else:
