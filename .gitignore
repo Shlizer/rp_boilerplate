@@ -1,0 +1,15 @@
+/game/cache/
+/game/saves/
+
+!/assets/
+/assets/*
+!/assets/.gitkeep
+
+.idea
+.vscode
+.history
+
+log.txt
+*.rpyc
+*.rpymc
+*.psd
