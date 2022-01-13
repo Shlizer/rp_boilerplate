@@ -3,6 +3,8 @@
 ## Used to display the main menu when Ren'Py starts.
 ##
 
+init offset = -60
+
 screen main_menu():
 
     ## This ensures that any other menu screen is replaced.

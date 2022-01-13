@@ -4,6 +4,8 @@
 ## menus.
 ##
 
+init offset = -60
+
 screen quick_menu():
 
     ## Ensure this appears on top of other screens.

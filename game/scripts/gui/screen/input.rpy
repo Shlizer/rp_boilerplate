@@ -7,7 +7,7 @@
 ## various input parameters.
 ##
 
-init offset = -1
+init offset = -60
 
 screen input(prompt):
     style_prefix "input"
