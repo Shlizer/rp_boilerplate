@@ -1,4 +1,5 @@
 label start:
+    show screen phone_main
     jump test_choice
 
 label test_choice:
