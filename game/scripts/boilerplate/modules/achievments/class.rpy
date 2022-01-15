@@ -30,9 +30,9 @@ init -150 python:
                 self.reset()
             return self.amount == 0
 
-        def finish(self, withDate = time.time()):
+        def finish(self, withDate = None):
             self.finished = True
-            self.finishDate = withDate
+            self.finishDate = withDate or time.time()
 
         def reset(self):
             self.amount = None
@@ -86,7 +86,6 @@ init -150 python:
                         
                     trophy.finish()
                     savePersistent(trophy.id, trophy.finishDate, trophy.amount)
-                    print persistent.achievements
                     self.toAdd.append(trophy)
                 else:
                     toast("Achievement with ID '" + id + "' is already finished")
@@ -133,7 +132,7 @@ init -150 python:
                 if not self.registered[id].isHidden and (self.registered[id].finished or self.registered[id].amount > 0):
                     list.append(self.registered[id])
 
-            list.sort(key=lambda x: (x.finished, not x.amount), reverse=True)
+            list.sort(key=lambda x: (x.finishDate, not x.amount), reverse=True)
             return list
 
         def getLocked(self):

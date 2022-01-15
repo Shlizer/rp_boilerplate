@@ -3,7 +3,7 @@ init offset = -60
 screen achievement_menu():
     tag menu
 
-    default _trophy_hover = None
+    default trophy_hover = None
     $ counter = achievements.getCount()
 
     use game_menu(_("Achievements") + " | {:01d}/{}".format(counter[0], counter[1]), scroll="viewport"):
@@ -22,7 +22,7 @@ screen achievement_menu():
                 ## Granted or in progress achievements
                 for trophy in achievements.getGrantedOrInProgress():
                     button:
-                        if _trophy_hover == trophy.id:
+                        if trophy_hover == trophy.id:
                             if trophy.finished:
                                 background Solid('#08c')
                             else:
@@ -33,8 +33,8 @@ screen achievement_menu():
                             else:
                                 background Solid('#6b6b6b')
 
-                        hovered [SetLocalVariable('_trophy_hover', trophy.id), With(Dissolve(0.1))]
-                        unhovered [SetLocalVariable('_trophy_hover', None), With(Dissolve(0.1))]
+                        hovered [SetLocalVariable('trophy_hover', trophy.id), With(Dissolve(0.1))]
+                        unhovered [SetLocalVariable('trophy_hover', None), With(Dissolve(0.1))]
                         action [Function(achievements.revoke, trophy.id)]
 
                         hbox:
@@ -63,8 +63,8 @@ screen achievement_menu():
                 for trophy in achievements.getLocked():
 
                     button:
-                        hovered [SetLocalVariable('_trophy_hover', trophy.id), With(Dissolve(0.1))]
-                        unhovered [SetLocalVariable('_trophy_hover', None), With(Dissolve(0.1))]
+                        hovered [SetLocalVariable('trophy_hover', trophy.id), With(Dissolve(0.1))]
+                        unhovered [SetLocalVariable('trophy_hover', None), With(Dissolve(0.1))]
                         action [Function(achievements.grant, trophy.id)]
 
                         hbox:
