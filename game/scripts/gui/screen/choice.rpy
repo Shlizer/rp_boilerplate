@@ -16,6 +16,9 @@ screen choice(items):
                 unhovered [SetLocalVariable('choice_hover', None), With(Dissolve(0.1))]
                 action items[i].action
 
+                hover_sound "audio/sound/btn_hover.wav"
+                activate_sound "audio/sound/btn_click.wav"
+
                 if (choice_hover == i):
                     background Frame("images/gui/choice_box_hover.png", 2, 2, 2, 2, Tile=True)
                     text items[i].caption color "#eeeeee"

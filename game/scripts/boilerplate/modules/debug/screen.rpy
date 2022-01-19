@@ -20,7 +20,6 @@
 
         def changeDaytime(self):
             global daytime
-            print "change daytime"
             if (daytime == Daytime.morning):
                 daytime = Daytime.evening
             if (daytime == Daytime.evening):
@@ -39,7 +38,25 @@
 
 default persistent.debug_opened = False
 
-screen debug:
+transform debug_hover:
+    on idle:
+        easein 0.2 xoffset 80
+    on hover:
+        easein 0.2 xoffset 0
+
+screen debug_button():
+    if persistent.debug_opened:
+        button:
+            style "debug_button"
+            action SetVariable('persistent.debug_opened', not persistent.debug_opened)
+            transclude
+    else:
+        button at debug_hover:
+            style "debug_button"
+            action SetVariable('persistent.debug_opened', not persistent.debug_opened)
+            transclude
+
+screen debug():
     zorder 500
 
     vbox:
@@ -49,15 +66,12 @@ screen debug:
         xoffset -20
         ypos 20
 
-        button:
-            xalign 1.0
+        use debug_button:
             text "DEBUG" size (gui.text_size / 1.5)
-            background "#00000090"
-            action SetVariable('persistent.debug_opened', not persistent.debug_opened)
 
         if persistent.debug_opened == True:
             frame:
-                background "#00000090"
+                background "#99000090"
 
                 vbox:
                     for id in DEBUG.more:
@@ -73,3 +87,10 @@ screen debug:
                                     text_idle_color "#ffffff"
                                     text_hover_color "#e0e0e0"
                                     action DEBUG.more[id].action
+
+style debug_button:
+    xalign 1.0
+    xanchor 1.0
+    xsize 100
+    padding (10, 10, 10, 10)
+    background "#99000090"

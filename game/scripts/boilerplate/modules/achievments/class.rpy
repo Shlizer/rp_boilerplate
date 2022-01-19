@@ -1,6 +1,6 @@
 init -150 python:
     import time
-
+    
     ########################################
     # Single trophy (achievement) class; only for storing data - not logic
     # - amount: tuple of current and max values

@@ -14,10 +14,10 @@ screen game_menu(title, scroll=None, yinitial=0.0):
 
     style_prefix "game_menu"
 
-    if main_menu:
-        add gui.main_menu_background
-    else:
-        add gui.game_menu_background
+    #if main_menu:
+    #    add gui.main_menu_background
+    #else:
+    #    add gui.game_menu_background
 
     frame:
         style "game_menu_outer_frame"
@@ -94,7 +94,7 @@ style game_menu_outer_frame:
     bottom_padding 45
     top_padding 180
 
-    background "gui/overlay/game_menu.png"
+    background None
 
 style game_menu_navigation_frame:
     xsize 420

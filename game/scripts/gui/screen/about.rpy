@@ -7,10 +7,27 @@
 
 init offset = -60
 
+screen submenu_about():
+    use submenu(_("About"), scroll="viewport"):
+        vbox:
+            label "[config.name!t]"
+            text _("Version [config.version!t]\n")
+
+            ## gui.about is usually set in options.rpy.
+            if gui.about:
+                text "[gui.about!t]\n"
+
+            text _("Made with {a=https://www.renpy.org/}Ren'Py{/a} [renpy.version_only].\n\n[renpy.license!t]")
+
+
+
+
 screen about():
 
     tag menu
 
+    use main_menu_bg
+    
     ## This use statement includes the game_menu screen inside this one. The
     ## vbox child is then included inside the viewport inside the game_menu
     ## screen.

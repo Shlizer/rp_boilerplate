@@ -11,6 +11,7 @@ screen preferences():
 
     tag menu
 
+    use main_menu_bg
     use game_menu(_("Preferences"), scroll="viewport"):
 
         vbox:
