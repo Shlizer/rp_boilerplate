@@ -17,12 +17,17 @@ image main_menu_rain:
     contains main_menu_rain_animation
 
 screen main_menu_bg():
+    key "K_ESCAPE" action Function(print, 'K_ESCAPE')#Show('game_menu')
     frame:
-        add TrackCursor("images/main_menu/bg.jpg", 22):
-            xalign 0.85
-            yalign 0.8
-        add TrackCursor("main_menu_rain", 22) at center
-        add TrackCursor("images/main_menu/fg.png", 16) at center
+        add "images/main_menu/bg.jpg" at update_pos_22:
+            xoffset -(2120 - X_RES)
+            yoffset -(1280 - Y_RES)
+        add "main_menu_rain" at update_pos_22:
+            xoffset -(2120 - X_RES)
+            yoffset -(1280 - Y_RES)
+        add "images/main_menu/fg.png" at update_pos_16:
+            xoffset -(2120 - X_RES)
+            yoffset -(1280 - Y_RES)
 
 style main_menu_frame is empty
 style main_menu_vbox is vbox

@@ -5,110 +5,147 @@
 
 init offset = -60
 
-transform navButton:
-    transform_anchor True
-    xanchor 1.0
-    on idle:
-        easein 0.2 xsize 300
-    on hover:
-        easein 0.2 xsize 330
+init python:
+    class LoadMostRecent(Action):
+        def __init__(self):
+            self.slot = renpy.newest_slot()
 
-screen navigation(mouse = [0,0]):
-    vbox:
-        style_prefix "navigation"
+        def __call__(self):
+            renpy.load(self.slot)
 
-        xpos 0.95
+        def get_sensitive(self):
+            return self.slot is not None
+
+define showMore = True
+
+screen navigation():
+    $ btnCounter = 0
+    
+    vbox at update_pos_26:
+        style_prefix "nav"
+        xoffset 1800
+        yoffset 300
+        yanchor 0.0
         yalign 0.5
-        
-        spacing 0
+        spacing 4
 
         if main_menu:
 
-            button at navButton:
-                text _("Start")
-                mouse "choice"
-                action Start()
-                hover_sound "audio/sound/btn_hover.wav"
-                activate_sound "audio/sound/btn_click.wav"
+            if renpy.newest_slot() is not None:
+
+                $ btnCounter = btnCounter + 1
+                use navigation_button(_("Continue"), LoadMostRecent(), counter=btnCounter)
+
+            $ btnCounter = btnCounter + 1
+            use navigation_button(_("Start"), Start(), counter=btnCounter)
 
         else:
 
-            button at navButton:
-                text _("Save")
-                mouse "choice"
-                action ShowMenu("save")
-                hover_sound "audio/sound/btn_hover.wav"
-                activate_sound "audio/sound/btn_click.wav"
+            $ btnCounter = btnCounter + 1
+            use navigation_button(_("Save"), submenu='save', counter=btnCounter)
 
-        button at navButton:
-            text _("Load")
-            mouse "choice"
-            action SetVariable('menu_selection', 'load')#ShowMenu("load")
-            hover_sound "audio/sound/btn_hover.wav"
-            activate_sound "audio/sound/btn_click.wav"
+        $ btnCounter = btnCounter + 1
+        use navigation_button(_("More/Less"), SetVariable('showMore', not showMore), counter=btnCounter)
+        
+        if showMore:
+            $ btnCounter = btnCounter + 1
+            use navigation_button(_("Load"), submenu='load', counter=btnCounter)
+            
+            $ btnCounter = btnCounter + 1
+            use navigation_button(_("Options"), submenu='options', counter=btnCounter)
 
-        button at navButton:
-            text _("Options")
-            mouse "choice"
-            action Function(show_submenu, 'options')
-            hover_sound "audio/sound/btn_hover.wav"
-            activate_sound "audio/sound/btn_click.wav"
+            $ btnCounter = btnCounter + 1
+            use navigation_button(_("Replays"), submenu='replays', counter=btnCounter)
 
-        button at navButton:
-            text _("Achievements")
-            mouse "choice"
-            action Function(show_submenu, 'achievements')
-            hover_sound "audio/sound/btn_hover.wav"
-            activate_sound "audio/sound/btn_click.wav"
+        if not main_menu:
 
-        if _in_replay:
+            $ btnCounter = btnCounter + 1
+            use navigation_button(_("Choices"), submenu='choices', counter=btnCounter)
 
-            button at navButton:
-                text _("End Replay")
-                mouse "choice"
-                action EndReplay(confirm=True)
-                hover_sound "audio/sound/btn_hover.wav"
-                activate_sound "audio/sound/btn_click.wav"
+        $ btnCounter = btnCounter + 1
+        use navigation_button(_("Achievements"), submenu='achievements', counter=btnCounter)
 
-        elif not main_menu:
+        $ btnCounter = btnCounter + 1
+        use navigation_button(_("Credits"), submenu='credits', counter=btnCounter)
 
-            button at navButton:
-                text _("Main Menu")
-                mouse "choice"
-                action MainMenu()
-                hover_sound "audio/sound/btn_hover.wav"
-                activate_sound "audio/sound/btn_click.wav"
+        if not main_menu:
 
-        button at navButton:
-            text _("About")
-            mouse "choice"
-            action Function(show_submenu, 'about')
-            hover_sound "audio/sound/btn_hover.wav"
-            activate_sound "audio/sound/btn_click.wav"
+            $ btnCounter = btnCounter + 1
+            use navigation_button(_("Exit to menu"), MainMenu(), counter=btnCounter)
 
         if renpy.variant("pc"):
 
             ## The quit button is banned on iOS and unnecessary on Android and
             ## Web.
-            button at navButton:
-                text _("Quit")
-                mouse "choice"
-                action Quit(confirm=not main_menu)
-                hover_sound "audio/sound/btn_hover.wav"
-                activate_sound "audio/sound/btn_click.wav"
+            $ btnCounter = btnCounter + 1
+            use navigation_button(_("Exit game"), Quit(confirm=not main_menu), counter=btnCounter)
+
+transform navButton(counter = 0):
+    on idle:
+        easein 0.7 xpos 0
+    on hover:
+        easein 0.3 xpos -60
+
+transform navButtonSelected():
+    on idle:
+        easein 0.7 xpos -60
+    on hover:
+        easein 0.3 xpos -60
 
 
-style navigation_button is gui_button
-style navigation_text is gui_button_text
+screen navigation_button(label, action = NullAction, submenu = None, counter = 0):
+    #on "show" action Function(print, "SHOW " + label)
+    button:# at (navButton(counter) if action == NullAction and submenu != None else navButtonSelected():
+        xanchor 1.0
+        xoffset 0
 
-style navigation_button:
-    #size_group "navigation"
+        if submenu == None or submenu != submenu_opened:
+            at navButton(counter)
+            style "nav_button"
+            text label
+        else:
+            at navButtonSelected()
+            style "nav_button_opened"
+            text label style "nav_text_opened"
+
+        mouse "choice"
+        hover_sound gui.audio_btn_hover
+        activate_sound gui.audio_btn_click
+
+        if action == NullAction and submenu != None:
+            action [Function(show_submenu, submenu)]# at btn_selection(transition_data[0], transition_data[1])
+        else:
+            action action
+
+
+style nav_button is gui_button
+style nav_text is gui_button_text
+style nav_button_opened is nav_button
+style nav_text_opened is gui_button_text
+
+style nav_button:
     xsize 300
-    padding(40, 20, 40, 20)
-    background Solid("#45454570")
-    hover_background Solid("#be6f2670")
+    ysize 61
+    xpos 0
+    padding(50, 0, 40, 0)
+    background Frame("images/button_menu_idle.png", Borders(31,31,3,3))
+    hover_background Frame("images/button_menu_hover.png", Borders(31,31,3,3))
 
-style navigation_text:
-    color "#999999"
-    hover_color "#c29d6670"
+style nav_text:
+    color gui.color_menu_buttons_text
+    hover_color gui.color_menu_buttons_text_hover
+    size 30
+
+style nav_button_opened:
+    #xsize 6 5
+    #xoffset -280
+    xpos -60
+    padding(30, 0, 40, 0)
+    background Frame("images/button_menu_hover.png", Borders(31,31,3,3))
+    hover_background Frame("images/button_menu_opened_hover.png", Borders(31,31,3,3))
+
+style nav_text_opened:
+    xpos 20
+    color gui.color_menu_buttons_text_hover
+    hover_color gui.color_menu_buttons_text_hover
     size 30

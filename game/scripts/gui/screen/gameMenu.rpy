@@ -10,8 +10,25 @@
 
 init offset = -60
 
-screen game_menu(title, scroll=None, yinitial=0.0):
+define _game_menu_screen = "pause_menu"
 
+init python:
+    def onPause():
+        print 'PAUSE: playin rain? ' + str(renpy.music.get_playin('ambient1'))
+        if not renpy.predicting():
+            playMainMenuAudio()
+
+screen pause_menu():
+#    key "K_ESCAPE" action Show('game_main_menu')
+    $ onPause()
+    use main_menu
+
+screen game_menu():
+    $ onPause()
+    text "> GAME MENU"
+    $ print "> MAIN MENU"
+
+$'''
     style_prefix "game_menu"
 
     #if main_menu:
@@ -127,4 +144,4 @@ style return_button:
     xpos gui.navigation_xpos
     yalign 1.0
     yoffset -45
-
+'''
