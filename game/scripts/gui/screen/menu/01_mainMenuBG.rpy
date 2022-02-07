@@ -19,13 +19,13 @@ image main_menu_rain:
 screen main_menu_bg():
     key "K_ESCAPE" action Function(print, 'K_ESCAPE')#Show('game_menu')
     frame:
-        add "images/main_menu/bg.jpg" at update_pos_22:
+        add "images/main_menu/bg.jpg" at float_with_mouse(22):
             xoffset -(2120 - X_RES)
             yoffset -(1280 - Y_RES)
-        add "main_menu_rain" at update_pos_22:
+        add "main_menu_rain" at float_with_mouse(22):
             xoffset -(2120 - X_RES)
             yoffset -(1280 - Y_RES)
-        add "images/main_menu/fg.png" at update_pos_16:
+        add "images/main_menu/fg.png" at float_with_mouse(16):
             xoffset -(2120 - X_RES)
             yoffset -(1280 - Y_RES)
 

@@ -30,16 +30,22 @@ init python:
             submenu_opened = None
             hide_screens()
 
-define submenu_opened = ''
-#define submenu_opened = 'achievements'
+    #def opened_submenu(name):
+    #    global submenu_opened
+    #    return submenu_opened == 'screen submenu_' + str(name)
+
+#define submenu_opened = ''
+define submenu_opened = 'chapters'
 
 define submenu_screens = [
-    'start',
+    'chapters',
     'save',
     'load',
     'options',
-    'achievements',
-    'about',
+    'extras',
+    'choices', # @todo: into extras
+    'achievements', # @todo: into extras
+    'credits', # @todo: into extras
 ]
 
 
@@ -51,12 +57,34 @@ transform submenu_transition:
     on hide:
         linear 0.2 alpha 0
 
+
+transform submenu_panel_transition(xPos = 0, yPos = 0):
+    on show:
+        xpos xPos
+        ypos yPos
+        alpha 0
+        parallel:
+            linear 0.4 alpha 1
+        parallel:
+            linear 0.4 xpos 0
+        parallel:
+            linear 0.4 ypos 0
+
+    on hide:
+        parallel:
+            linear 0.4 alpha 0
+        parallel:
+            linear 0.4 xpos xPos
+        parallel:
+            linear 0.4 ypos yPos
+
+
 screen submenu(title, scroll=None, yinitial=0.0):
     style_prefix "submenu"
 
     button at submenu_transition:
 
-        frame at update_pos_26:
+        frame at float_with_mouse(26):
             textbutton title style "submenu_title"
 
             vbox:
@@ -111,5 +139,5 @@ style submenu_title:
 
 style submenu_title_text:
     font font_semibold
-    color gui.color_panel_title_color
+    color gui.color_primary_light
     size 35

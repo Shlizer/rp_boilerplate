@@ -9,7 +9,7 @@
         more = {}
 
         def __init__(self):
-            config.periodic_callbacks.append(self.debug_screen_show)
+            #config.periodic_callbacks.append(self.debug_screen_show)
 
             self.add('__label', "Label: [current_label]")
             self.add('__daytime', "Daytime: [daytime]", type='textbutton', action=self.changeDaytime)

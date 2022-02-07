@@ -12,16 +12,14 @@ transform main_menu_transition:
 
 init -70 python:
     def playMainMenuAudio():
-        print 'playin rain? ' + str(renpy.music.get_playing('ambient1'))
-        if renpy.music.get_playing('ambient1') == None:
+        if renpy.music.get_playing('ambient') == None:
             print 'play rain'
-            renpy.music.play("rain.wav", channel="ambient1", loop=True, fadeout=2.0, fadein=4.0, relative_volume=0.1)
-        if renpy.music.get_playing('bg-music') == None:
-            renpy.music.play("Sad_Circus.mp3", channel="bg-music", loop=True, fadeout=2.0, fadein=4.0, relative_volume=0.3)
+            renpy.music.play("rain.wav", channel="ambient", loop=True, fadeout=2.0, fadein=4.0, relative_volume=0.1)
+        if renpy.music.get_playing('music') == None:
+            renpy.music.play("Sad_Circus.mp3", channel="music", loop=True, fadeout=2.0, fadein=4.0, relative_volume=0.3)
 
 label before_main_menu:
     $ playMainMenuAudio()
-    #$ renpy.show_screen('game_main_menu_key')
 
 define config.layers = [ 'master', 'transient', 'threeD_text', 'screens', 'overlay' ]
 define e_3d = Character("Eileen3D", show_layer="threeD_text")
@@ -70,7 +68,7 @@ screen test():
 
 
 $'''
-'''
+'' '
 label main_menu:
     #camera screens:
     #    perspective True
@@ -84,10 +82,18 @@ label main_menu:
 
     while True:
         pause
-$'''
+$' ''
 '''
 
+init python:
+    def check_submenu_autoopen():
+        global submenu_opened
+        if submenu_opened != '':
+            show_submenu(submenu_opened)
+
+
 screen main_menu():
+    on "show" action Function(check_submenu_autoopen)
     #key "K_ESCAPE" action Show('game_main_menu')
     #$ print renpy.has_label("game_menu")
     #show screen mouse_pos(mousePos)
@@ -98,5 +104,5 @@ screen main_menu():
 
 style btn:
     padding(40, 20, 40, 20)
-    background gui.color_menu_buttons_bg
-    hover_background gui.color_menu_buttons_bg_hover
+    #background gui.color_menu_buttons_bg
+    #hover_background gui.color_menu_buttons_bg_hover

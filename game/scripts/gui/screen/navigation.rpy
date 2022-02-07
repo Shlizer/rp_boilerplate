@@ -6,7 +6,17 @@
 init offset = -60
 
 init python:
-    class LoadMostRecent(Action):
+    class menuButtonAction(Action):
+        def __init__(self, submenu):
+            self.submenu = submenu
+
+        def __call__(self):
+            NullAction()
+
+        def get_selected(self):
+            return self.submenu and submenu_opened == self.submenu
+
+    class menuContinueButtonAction(Action):
         def __init__(self):
             self.slot = renpy.newest_slot()
 
@@ -21,7 +31,7 @@ define showMore = True
 screen navigation():
     $ btnCounter = 0
     
-    vbox at update_pos_26:
+    vbox at float_with_mouse(26):
         style_prefix "nav"
         xoffset 1800
         yoffset 300
@@ -29,15 +39,16 @@ screen navigation():
         yalign 0.5
         spacing 4
 
+        text submenu_opened xpos -300
         if main_menu:
 
             if renpy.newest_slot() is not None:
 
                 $ btnCounter = btnCounter + 1
-                use navigation_button(_("Continue"), LoadMostRecent(), counter=btnCounter)
+                use navigation_button(_("Continue"), menuContinueButtonAction(), counter=btnCounter)
 
             $ btnCounter = btnCounter + 1
-            use navigation_button(_("Start"), Start(), counter=btnCounter)
+            use navigation_button(_("Start"), submenu='chapters', counter=btnCounter)
 
         else:
 
@@ -80,72 +91,102 @@ screen navigation():
             $ btnCounter = btnCounter + 1
             use navigation_button(_("Exit game"), Quit(confirm=not main_menu), counter=btnCounter)
 
+init python:
+    def test_fn(submenu):
+        def test_fn2(tf,st,at):
+            #if submenu == 'options':
+                #print "---"
+                #for i in dir(tf.arguments):
+                #    if not i.startswith('__'):
+                #        print i
+                #print dir(tf.arguments)
+            if submenu_opened == submenu:
+                tf.xpos = -65
+            elif tf.xpos == -65:
+                tf.xpos = 0
+            return 0
+        return test_fn2
+
 transform navButton(counter = 0):
+    #xpos 300 + (counter * 30)
     on idle:
         easein 0.7 xpos 0
     on hover:
         easein 0.3 xpos -60
 
-transform navButtonSelected():
+transform navButtonSelected(counter = 0):
+    #xpos 300 + (counter * 30)
     on idle:
         easein 0.7 xpos -60
     on hover:
-        easein 0.3 xpos -60
-
+        easein 0.3 xpos -70
 
 screen navigation_button(label, action = NullAction, submenu = None, counter = 0):
-    #on "show" action Function(print, "SHOW " + label)
-    button:# at (navButton(counter) if action == NullAction and submenu != None else navButtonSelected():
-        xanchor 1.0
-        xoffset 0
-
-        if submenu == None or submenu != submenu_opened:
-            at navButton(counter)
-            style "nav_button"
-            text label
+    button:
+        if (submenu_opened == submenu):
+            at navButtonSelected(counter)
         else:
-            at navButtonSelected()
-            style "nav_button_opened"
-            text label style "nav_text_opened"
-
-        mouse "choice"
-        hover_sound gui.audio_btn_hover
-        activate_sound gui.audio_btn_click
+            at navButton(counter)
+        text label + " " + str(counter)
 
         if action == NullAction and submenu != None:
-            action [Function(show_submenu, submenu)]# at btn_selection(transition_data[0], transition_data[1])
+            action [menuButtonAction(submenu), Function(show_submenu, submenu)]
         else:
             action action
 
 
-style nav_button is gui_button
+init python:
+    def button_fn(submenu):
+        def test_fn2(tf,st,at):
+            #if submenu == 'options':
+                #print "---"
+                #for i in dir(tf.arguments):
+                #    if not i.startswith('__'):
+                #        print i
+                #print dir(tf.arguments)
+            if submenu_opened == submenu:
+                tf.xpos = -65
+            elif tf.xpos == -65:
+                tf.xpos = 0
+            return 0
+        return test_fn2
+
+
+transform button_transform(isSelected):
+    #function test_fn(submenu)
+    xpos 300 + (counter * 30)
+    on idle:
+        easein 0.7 xpos 0
+    on hover:
+        easein 0.3 xpos -60
+
+screen some_button(label, isSelected):
+    button at button_transform(isSelected):
+        text label
+        action NullAction
+
+
+
+
+
+
+
+
+style nav_button is btn_menu
 style nav_text is gui_button_text
-style nav_button_opened is nav_button
 style nav_text_opened is gui_button_text
 
 style nav_button:
     xsize 300
     ysize 61
     xpos 0
-    padding(50, 0, 40, 0)
-    background Frame("images/button_menu_idle.png", Borders(31,31,3,3))
-    hover_background Frame("images/button_menu_hover.png", Borders(31,31,3,3))
 
 style nav_text:
-    color gui.color_menu_buttons_text
-    hover_color gui.color_menu_buttons_text_hover
+    color gui.color_button_menu_text
+    hover_color gui.color_button_menu_text_hover
     size 30
 
-style nav_button_opened:
-    #xsize 6 5
-    #xoffset -280
-    xpos -60
-    padding(30, 0, 40, 0)
-    background Frame("images/button_menu_hover.png", Borders(31,31,3,3))
-    hover_background Frame("images/button_menu_opened_hover.png", Borders(31,31,3,3))
-
 style nav_text_opened:
-    xpos 20
-    color gui.color_menu_buttons_text_hover
-    hover_color gui.color_menu_buttons_text_hover
+    color gui.color_button_menu_text_hover
+    hover_color gui.color_button_menu_text_hover
     size 30

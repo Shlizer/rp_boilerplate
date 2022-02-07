@@ -152,6 +152,9 @@ define config.save_directory = "RP_boilerplate-1641514904"
 
 define config.window_icon = "gui/window_icon.png"
 
+define config.predict_screen_statements = False
+define config.predict_screens = False
+
 
 ## Build configuration #########################################################
 ##
