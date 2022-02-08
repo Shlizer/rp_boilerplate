@@ -34,8 +34,8 @@ init python:
     #    global submenu_opened
     #    return submenu_opened == 'screen submenu_' + str(name)
 
-#define submenu_opened = ''
-define submenu_opened = 'chapters'
+define submenu_opened = ''
+#define submenu_opened = 'chapters'
 
 define submenu_screens = [
     'chapters',
@@ -43,9 +43,9 @@ define submenu_screens = [
     'load',
     'options',
     'extras',
-    'choices', # @todo: into extras
-    'achievements', # @todo: into extras
-    'credits', # @todo: into extras
+    #'choices', # @todo: into extras
+    #'achievements', # @todo: into extras
+    #'credits', # @todo: into extras
 ]
 
 

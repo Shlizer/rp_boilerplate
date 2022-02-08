@@ -20,14 +20,15 @@ screen pause_menu():
 #    key "K_ESCAPE" action Show('game_main_menu')
     $ onPause()
     use main_menu
-  
-screen submenu_save():
-    use submenu(_("Save")):
-        use file_slots()
 
-screen submenu_load():
-    use submenu(_("Load")):
-        use file_slots()
+#screen submenu_save():
+#   use submenu(_("Save")):
+#        use file_slots()
+
+#screen submenu_load():
+#    use submenu(_("Load")):
+#        textbutton "asdfsdfs"
+#        #use file_slots()
 
 screen file_slots():
 

@@ -1,13 +1,16 @@
+define gui.color_primary_lighter = '#c08650'
 define gui.color_primary_light = '#c08650'
-define gui.color_primary_dark = '#784a18'
+define gui.color_primary_dark = '#946431'
 define gui.color_primary_darker = '#402100'
 define gui.color_primary_action = '#9b6328'
 
+define gui.color_text_dark = "#838383"
 define gui.color_text_light = "#f5e5e5"
 define gui.color_text = "#dbd0d0"
 
 define gui.color_dark_1 = "#333333e7"
 define gui.color_dark_2 = "#252525"
+define gui.color_dark_3 = "#535353"
 
 define gui.audio_btn_hover = "audio/sound/btn_hover.wav"
 define gui.audio_btn_click = "audio/sound/btn_click.wav"
@@ -16,23 +19,6 @@ define gui.audio_btn_click = "audio/sound/btn_click.wav"
 #################################################################
 ## BUTTONS
 #################################################################
-define gui.color_button_menu_idle = gui.color_dark_2
-define gui.color_button_menu_hover = gui.color_primary_dark
-define gui.color_button_menu_selected = gui.color_primary_light
-define gui.color_button_menu_selected_hover = gui.color_primary_action
-define gui.color_button_menu_text = "#838383"
-define gui.color_button_menu_text_hover = gui.color_primary_darker
-
-define gui.color_button_light_idle = gui.color_button_menu_idle + "50"
-define gui.color_button_light_hover = gui.color_button_menu_idle
-define gui.color_button_light_border = gui.color_button_menu_hover + "60"
-define gui.color_button_light_border_hover = gui.color_button_menu_hover
-
-define gui.color_button_light_selected = gui.color_button_menu_selected + "50"
-define gui.color_button_light_selected_hover = gui.color_button_menu_selected
-define gui.color_button_light_selected_border = gui.color_button_menu_selected_hover + "50"
-define gui.color_button_light_selected_border_hover = gui.color_button_menu_selected_hover
-
 init python:
     def getUIComposite(width, height, *args):
         compositeArgs = [(width, height)]
@@ -46,6 +32,44 @@ init python:
     def getUICompositeFrame(width, height, border, *args):
         return Frame(getUIComposite(width, height, *args), Borders(*border))
 
+style btn_basic is gui_button
+style btn_basic:
+    mouse "choice"
+    hover_sound gui.audio_btn_hover
+    activate_sound gui.audio_btn_click
+
+#################################################################
+## BUTTONS - MENU
+#################################################################
+define gui.color_button_menu_idle = gui.color_dark_2
+define gui.color_button_menu_hover = gui.color_primary_dark
+define gui.color_button_menu_selected = gui.color_primary_light
+define gui.color_button_menu_selected_hover = gui.color_primary_action
+
+style btn_menu:
+    background getUICompositeFrame(32, 64, (31,31,3,3), (gui.color_button_menu_idle, "images/btn_menu_bg.png"))
+    hover_background getUICompositeFrame(32, 64, (31,31,3,3), (gui.color_button_menu_hover, "images/btn_menu_bg.png"))
+    selected_background getUICompositeFrame(32, 64, (31,31,3,3), (gui.color_button_menu_selected, "images/btn_menu_bg.png"))
+    selected_hover_background getUICompositeFrame(32, 64, (31,31,3,3), (gui.color_button_menu_selected_hover, "images/btn_menu_bg.png"))
+    xpos 0
+    selected_xpos -60
+    padding(50, 0, 40, 0)
+    minimum (32, 61)
+    xanchor 1.0
+    xoffset 0
+
+style btn_menu is btn_basic
+style btn_menu_selected is btn_basic
+
+style btn_menu_text is gui_button_text:
+    color gui.color_text_dark
+    hover_color gui.color_primary_darker
+    selected_color gui.color_primary_darker
+
+#################################################################
+## BUTTONS - LIGHT
+#################################################################
+init python:
     def getUIBtnLight():
         return Composite(
             (40, 42),
@@ -71,28 +95,27 @@ init python:
             (0,0), AlphaMask(Solid(gui.color_button_light_selected_border), "images/btn_light_border.png"),
         )
 
-style btn_basic is gui_button
-style btn_menu is btn_basic
-style btn_menu_selected is btn_basic
+define gui.color_button_light_idle = gui.color_button_menu_idle + "50"
+define gui.color_button_light_hover = gui.color_button_menu_idle
+define gui.color_button_light_border = gui.color_button_menu_hover + "60"
+define gui.color_button_light_border_hover = gui.color_button_menu_hover
+
+define gui.color_button_light_selected = gui.color_button_menu_selected + "50"
+define gui.color_button_light_selected_hover = gui.color_button_menu_selected
+define gui.color_button_light_selected_border = gui.color_button_menu_selected_hover + "50"
+define gui.color_button_light_selected_border_hover = gui.color_button_menu_selected_hover
+define gui.color_button_light_insensitive = gui.color_button_menu_selected_hover + "50"
+define gui.color_button_light_insensitive_border = gui.color_button_menu_selected_hover
+
 style btn_light is btn_basic
 style btn_light_selected is btn_basic
 
-style btn_basic:
-    mouse "choice"
-    hover_sound gui.audio_btn_hover
-    activate_sound gui.audio_btn_click
-
-style btn_menu:
-    background getUICompositeFrame(32, 64, (31,31,3,3), (gui.color_button_menu_idle, "images/btn_menu_bg.png"))
-    hover_background getUICompositeFrame(32, 64, (31,31,3,3), (gui.color_button_menu_hover, "images/btn_menu_bg.png"))
-    selected_background getUICompositeFrame(32, 64, (31,31,3,3), (gui.color_button_menu_selected, "images/btn_menu_bg.png"))
-    selected_hover_background getUICompositeFrame(32, 64, (31,31,3,3), (gui.color_button_menu_selected_hover, "images/btn_menu_bg.png"))
-    xpos 0
-    selected_xpos -60
-    padding(50, 0, 40, 0)
-    minimum (32, 61)
-    xanchor 1.0
-    xoffset 0
+style btn_light_text is gui_button_text:
+    size 25
+    color gui.color_primary_light
+    hover_color gui.color_primary_lighter
+    selected_color gui.color_primary_dark
+    insensitive_color gui.color_text_dark
 
 style btn_light_small:
     background getUICompositeFrame(20, 29, (9,9,9,9), (gui.color_button_light_idle, "images/btn_light_small_bg.png"), (gui.color_button_light_border, "images/btn_light_small_border.png"))
@@ -107,15 +130,11 @@ style btn_light:
     hover_background getUICompositeFrame(40, 42, (20,20,20,20), (gui.color_button_light_hover, "images/btn_light_bg.png"), (gui.color_button_light_border_hover, "images/btn_light_border.png"))
     selected_background getUICompositeFrame(40, 42, (20,20,20,20), (gui.color_button_light_selected, "images/btn_light_bg.png"), (gui.color_button_light_selected_border, "images/btn_light_border.png"))
     selected_hover_background getUICompositeFrame(40, 42, (20,20,20,20), (gui.color_button_light_selected_hover, "images/btn_light_bg.png"), (gui.color_button_light_selected_border_hover, "images/btn_light_border.png"))
+    insensitive_background getUICompositeFrame(40, 42, (20,20,20,20), (gui.color_dark_3, "images/btn_light_bg.png"), (gui.color_dark_2, "images/btn_light_border.png"))
     xpos 0
     selected_xpos -30
     padding (20, 10, 20, 10)
     minimum (40, 42)
-
-style btn_menu_text is gui_button_text:
-    color "#FF0000"
-
-
 
 #################################################################
 ## CHECKBOX / RADIOBOX

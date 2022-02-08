@@ -43,3 +43,4 @@ screen submenu_options_buttons():
 
 style btn_options_selection is btn_light:
     xsize 180
+style btn_options_selection_text is btn_light_text

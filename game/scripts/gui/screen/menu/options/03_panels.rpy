@@ -4,9 +4,6 @@ screen submenu_options_graphics():
         Hide('submenu_options_audio'),
         Hide('submenu_options_gameplay'),
     ]
-    on "hide" action [
-        #SetVariable('submenu_options_selected', ''),
-    ]
 
     button at submenu_panel_transition(xPos=-300):
         frame at float_with_mouse(26):
